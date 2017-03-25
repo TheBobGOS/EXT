@@ -80,8 +80,8 @@ end
 
 function FlashGO()
 	print("Flash Helper | Flashing!")
-	--Control.Move()
-	Control.CastSpell(flashHK,cursorPos)
+	Control.Move()
+	Control.CastSpell(flashHK)
 	justFlashed = true;
 	flashTimer = 0;
 end
