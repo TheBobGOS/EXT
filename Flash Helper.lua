@@ -1,6 +1,6 @@
 --variables
 local lolVersion = "7.6"
-local scrVersion = "0.1.7 Beta"
+local scrVersion = "0.1.8 Beta"
 
 menuIcon = "http://i.imgur.com/uO0pDv8.png"
 
