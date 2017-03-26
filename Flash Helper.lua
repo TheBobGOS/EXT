@@ -1,6 +1,6 @@
 --variables
 local lolVersion = "7.6"
-local scrVersion = "0.1.8 Beta"
+local scrVersion = "0.2.1 Beta"
 
 menuIcon = "http://i.imgur.com/uO0pDv8.png"
 
@@ -24,9 +24,14 @@ local flashSpell = SUMMONER_1;
 local flashHK = HK_SUMMONER_1;
 local justFlashed = false;
 local flashTimer = 0;
+--OW variables
+local EOrbWalk = false
+local ICOrbWalk= false
+local GOSOrbWalk = false
 
 function OnLoad()
 	print("Flash Helper V: ".. scrVersion .." | Loaded | By: TheBob")
+	getOrbWalker()
 	if myHero:GetSpellData(SUMMONER_1).name == "SummonerFlash" then
 		print("Flash Helper | Flash Found in summoner slot 1")
 		flashHK = HK_SUMMONER_1;
@@ -79,13 +84,58 @@ function CanFlash()
 end
 
 function FlashGO()
-	print("Flash Helper | Flashing!")
-	Control.Move()
-	Control.CastSpell(flashHK)
-	justFlashed = true;
-	flashTimer = 0;
+	if ICOrbWalk then
+		print("Flash Helper | Orbwalker Check Passed! IC")
+		if _G.SDK.Orbwalker:CanMove(myHero) then
+			print("Flash Check Passed!")
+			print("Flash Helper | Flashing!")
+			Control.Move()
+			Control.CastSpell(flashHK)
+			justFlashed = true;
+			flashTimer = 0;
+		else
+			print("Flash Check Failed. Will try again next tick.")
+
+		end
+		
+	elseif EOrbWalk then
+		print("Flash Helper | Orbwalker Check Passed! eXt")
+		Control.Move()
+		Control.CastSpell(flashHK)
+		justFlashed = true;
+		flashTimer = 0;
+	
+	--elseif GOSOrbWalk then
+		--print("Flash Helper | Orbwalker Check Passed! GoS")
+		
+	else
+		print("Flash Helper | Flashing!")
+		Control.Move()
+		Control.CastSpell(flashHK)
+		justFlashed = true;
+		flashTimer = 0;
+	end
 end
 
 function CrowdControlled()
 
+end
+
+function getOrbWalker()
+	if EOW then 
+		print("Flash Helper | eXternal Orbwalker Detected.")
+		EOrbWalk = true
+		if _G.Orbwalker then
+			_G.Orbwalker.Enabled:Value(false)
+			_G.Orbwalker.Drawings.Enabled:Value(false)
+		end
+	elseif _G.SDK then
+		print("Flash Helper | IC's Orbwalker Detected.")
+		ICOrbWalk = true
+	elseif _G.Orbwalker then
+		print("Flash Helper | GOS Default Orbwalker Detected.")
+		GOSOrbWalk = true
+	else
+		print("No Orbwalker?");
+	end
 end
