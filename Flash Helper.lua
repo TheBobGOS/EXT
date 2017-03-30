@@ -1,6 +1,6 @@
 --variables
 local lolVersion = "7.6"
-local scrVersion = "0.2.1 Beta"
+local scrVersion = "0.1.11 Alpha"
 
 menuIcon = "http://i.imgur.com/uO0pDv8.png"
 
@@ -28,6 +28,7 @@ local flashTimer = 0;
 local EOrbWalk = false
 local ICOrbWalk= false
 local GOSOrbWalk = false
+local autoAttacking = false
 
 function OnLoad()
 	print("Flash Helper V: ".. scrVersion .." | Loaded | By: TheBob")
@@ -85,32 +86,29 @@ end
 
 function FlashGO()
 	if ICOrbWalk then
-		print("Flash Helper | Orbwalker Check Passed! IC")
-		if _G.SDK.Orbwalker:CanMove(myHero) then
-			print("Flash Check Passed!")
+		if _G.SDK.Orbwalker:CanMove(myHero) and not autoAttacking then
 			print("Flash Helper | Flashing!")
-			Control.Move()
+			--Control.Move()
 			Control.CastSpell(flashHK)
 			justFlashed = true;
 			flashTimer = 0;
 		else
-			print("Flash Check Failed. Will try again next tick.")
-
+			print("Flash Helper | Waiting for Auto-Attack/CC | Will retry next tick.")
 		end
 		
 	elseif EOrbWalk then
-		print("Flash Helper | Orbwalker Check Passed! eXt")
-		Control.Move()
+		--print("Flash Helper | Orbwalker Check Passed! eXt")
+		print("Flash Helper | Flashing!")
+		--Control.Move()
 		Control.CastSpell(flashHK)
 		justFlashed = true;
 		flashTimer = 0;
-	
 	--elseif GOSOrbWalk then
 		--print("Flash Helper | Orbwalker Check Passed! GoS")
 		
 	else
 		print("Flash Helper | Flashing!")
-		Control.Move()
+		--Control.Move()
 		Control.CastSpell(flashHK)
 		justFlashed = true;
 		flashTimer = 0;
@@ -125,17 +123,24 @@ function getOrbWalker()
 	if EOW then 
 		print("Flash Helper | eXternal Orbwalker Detected.")
 		EOrbWalk = true
-		if _G.Orbwalker then
-			_G.Orbwalker.Enabled:Value(false)
-			_G.Orbwalker.Drawings.Enabled:Value(false)
-		end
+		DisableDefaultOW()
 	elseif _G.SDK then
 		print("Flash Helper | IC's Orbwalker Detected.")
 		ICOrbWalk = true
+		DisableDefaultOW()
 	elseif _G.Orbwalker then
 		print("Flash Helper | GOS Default Orbwalker Detected.")
 		GOSOrbWalk = true
 	else
-		print("No Orbwalker?");
+		print("Flash Helper | No Orbwalker?");
+	end
+end
+
+
+function DisableDefaultOW()
+    if _G.Orbwalker then
+    	_G.Orbwalker.Enabled:Value(false)
+    	_G.Orbwalker.Drawings.Enabled:Value(false)
+    	print("Flash Helper | Default Orbwalker Disabled");
 	end
 end
