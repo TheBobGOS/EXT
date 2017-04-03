@@ -80,7 +80,8 @@ function OnTick()
 	if frameOne then
 		GetOrbWalker()
 		if ICOrbWalk then
-			
+			_G.SDK.Orbwalker:OnPreAttack(ICPreAttack() end)
+			_G.SDK.Orbwalker:OnAttack(ICPostAttack() end)
 		end
 		frameOne = false
 	end
@@ -224,4 +225,12 @@ function DisableDefaultOW()
     	_G.Orbwalker.Drawings.Enabled:Value(false)
     	--print("Flash Helper | Default Orbwalker Disabled");
 	end
+end
+
+function ICPreAttack()
+
+end
+
+function ICPostAttack()
+
 end
