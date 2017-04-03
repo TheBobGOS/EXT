@@ -1,6 +1,6 @@
 --variables
 local lolVersion = "7.6"
-local scrVersion = "0.2.11 Alpha"
+local scrVersion = "0.2.12 Alpha"
 
 menuIcon = "http://i.imgur.com/uO0pDv8.png"
 
@@ -86,13 +86,13 @@ function OnTick()
 		frameOne = false
 	end
 	if myHero.dead then return end
-	if justFlashed then
-		flashTimer = flashTimer + 1;
-		if flashTimer >= 15 then
-			flashTimer = 0
-			justFlashed = false
-		end
-	end
+	--if justFlashed then
+	--	flashTimer = flashTimer + 1;
+	--	if flashTimer >= 15 then
+	--		flashTimer = 0
+	--		justFlashed = false
+	--	end
+	--end
 	--if PMenu.Key.Dump:Value() then
 		--print(math.floor(myHero.pos.x + 0.5) .. ", " .. math.floor(myHero.pos.y + 0.5) .. ", ".. math.floor(myHero.pos.z + 0.5))
 	--end
