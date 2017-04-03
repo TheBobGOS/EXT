@@ -97,7 +97,7 @@ function OnTick()
 		--print(math.floor(myHero.pos.x + 0.5) .. ", " .. math.floor(myHero.pos.y + 0.5) .. ", ".. math.floor(myHero.pos.z + 0.5))
 	--end
 	--
-	if CanFlash() and PMenu.Key.Flash:Value() and not justFlashed then
+	if CanFlash() and PMenu.Key.Flash:Value() then
 		FlashGO();
 	end
 end
