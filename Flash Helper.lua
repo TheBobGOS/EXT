@@ -1,6 +1,6 @@
 --variables
 local lolVersion = "7.6"
-local scrVersion = "0.2.10 Alpha"
+local scrVersion = "0.2.11 Alpha"
 
 menuIcon = "http://i.imgur.com/uO0pDv8.png"
 
@@ -80,8 +80,8 @@ function OnTick()
 	if frameOne then
 		GetOrbWalker()
 		if ICOrbWalk then
-			_G.SDK.Orbwalker:OnPreAttack(ICPreAttack() end)
-			_G.SDK.Orbwalker:OnAttack(ICPostAttack() end)
+			_G.SDK.Orbwalker:OnPreAttack(ICPreAttack())
+			_G.SDK.Orbwalker:OnAttack(ICPostAttack())
 		end
 		frameOne = false
 	end
@@ -228,9 +228,9 @@ function DisableDefaultOW()
 end
 
 function ICPreAttack()
-
+	autoAttacking = true;
 end
 
 function ICPostAttack()
-
+	autoAttacking = false;
 end
