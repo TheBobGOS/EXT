@@ -1,5 +1,5 @@
 --variables
-local lolVersion = "7.6"
+local lolVersion = "7.7"
 local scrVersion = "0.3.15 Alpha"
 
 menuIcon = "http://i.imgur.com/uO0pDv8.png"
