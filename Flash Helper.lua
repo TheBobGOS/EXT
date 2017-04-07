@@ -1,6 +1,6 @@
 --variables
 local lolVersion = "7.6"
-local scrVersion = "0.2.12 Alpha"
+local scrVersion = "0.3.15 Alpha"
 
 menuIcon = "http://i.imgur.com/uO0pDv8.png"
 
@@ -52,7 +52,8 @@ local flashTimer = 0;
 local EOrbWalk = false
 local ICOrbWalk= false
 local GOSOrbWalk = false
-local autoAttacking = false
+local extLibOrbWalk = false
+local otherOW = false
 
 local frameOne = true
 
@@ -78,36 +79,38 @@ function OnTick()
 	if not PMenu.Enabled:Value() then return end
 	if not hasFlash then return end
 	if frameOne then
-		GetOrbWalker()
-		if ICOrbWalk then
-			_G.SDK.Orbwalker:OnPreAttack(ICPreAttack())
-			_G.SDK.Orbwalker:OnAttack(ICPostAttack())
-		end
+		--GetOrbWalker()
 		frameOne = false
 	end
 	if myHero.dead then return end
-	--if justFlashed then
-	--	flashTimer = flashTimer + 1;
-	--	if flashTimer >= 15 then
-	--		flashTimer = 0
-	--		justFlashed = false
-	--	end
-	--end
+	if justFlashed then
+		flashTimer = flashTimer + 1;
+		if flashTimer >= 20 then
+			flashTimer = 0
+			justFlashed = false
+		end
+	else
 	--if PMenu.Key.Dump:Value() then
 		--print(math.floor(myHero.pos.x + 0.5) .. ", " .. math.floor(myHero.pos.y + 0.5) .. ", ".. math.floor(myHero.pos.z + 0.5))
 	--end
 	--
-	if CanFlash() and PMenu.Key.Flash:Value() then
-		FlashGO();
+		if PMenu.Key.Flash:Value() then
+			if CanFlash() then
+				FlashGO();
+			else
+				print("Will retry next Tick.")
+			end
+		end
 	end
 end
+
 
 function OnDraw()
 	local lineWidth = 1
 	if not hasFlash then return end
 	if myHero.dead then return end
 	if PMenu.Drawing.Basic.Flash:Value() then
-		if PMenu.Drawing.Basic.During:Value() and not CanFlash() then
+		if PMenu.Drawing.Basic.During:Value() and myHero:GetSpellData(flashSpell).currentCd ~= 0 then
 			
 		else
 			Draw.Circle(myHero.pos,405,1,Draw.Color(PMenu.Drawing.Basic.Tran:Value() * 255, 255, 255, 0))
@@ -115,13 +118,13 @@ function OnDraw()
 	end
 	--Draw.Circle(myHero.pos,415,1,Draw.Color(PMenu.Drawing.Tran:Value() * 255, 255, 255, 0))
 	if PMenu.Drawing.Bushes.Bushes:Value() then
-		if PMenu.Drawing.Bushes.During:Value() and not CanFlash() then
+		if PMenu.Drawing.Bushes.During:Value() and myHero:GetSpellData(flashSpell).currentCd ~= 0 then
 
 		else
 			if Game.mapID == 11 then
 				for i=1,39,1 do 
 					if bushPositionsSR[i]:To2D().onScreen then
-						if bushPositionsSR[i]:DistanceTo() <= 425 and CanFlash() then
+						if bushPositionsSR[i]:DistanceTo() <= 440 and myHero:GetSpellData(flashSpell).currentCd == 0 then
 							lineWidth = 3
 						else
 							lineWidth = 1
@@ -133,7 +136,7 @@ function OnDraw()
 			if Game.mapID == 10 then
 				for i=1,11,1 do 
 					if bushPositionsTT[i]:To2D().onScreen then
-						if bushPositionsTT[i]:DistanceTo() <= 425 and CanFlash() then
+						if bushPositionsTT[i]:DistanceTo() <= 440 and myHero:GetSpellData(flashSpell).currentCd == 0 then
 							lineWidth = 3
 						else
 							lineWidth = 1
@@ -145,7 +148,7 @@ function OnDraw()
 			if Game.mapID == 12 then
 				for i=1,6,1 do
 					if bushPositionsHA[i]:To2D().onScreen then
-						if bushPositionsHA[i]:DistanceTo() <= 425 and CanFlash() then
+						if bushPositionsHA[i]:DistanceTo() <= 440 and myHero:GetSpellData(flashSpell).currentCd == 0 then
 							lineWidth = 3
 						else
 							lineWidth = 1
@@ -159,45 +162,27 @@ function OnDraw()
 end
 
 function CanFlash()
-	if myHero:GetSpellData(flashSpell).currentCd == 0 then
-		return true;
-	else
-		return false;
-	end
-end
-
-function FlashGO()
-	if ICOrbWalk then
-		if _G.SDK.Orbwalker:CanMove(myHero) and not autoAttacking then
-			print("Flash Helper | Flashing!")
-			--Control.Move()
-			Control.CastSpell(flashHK)
-			justFlashed = true;
-			flashTimer = 0;
-		else
-			print("Flash Helper | Waiting for Auto-Attack/CC | Will retry next tick.")
+	if GOSOrbWalk then
+		if CanFlashBasic() then
+			return true;
 		end
-		
-	elseif EOrbWalk then
-		--print("Flash Helper | Orbwalker Check Passed! eXt")
-		print("Flash Helper | Flashing!")
-		--Control.Move()
-		Control.CastSpell(flashHK)
-		justFlashed = true;
-		flashTimer = 0;
-	--elseif GOSOrbWalk then
-		--print("Flash Helper | Orbwalker Check Passed! GoS")
-		
-	else
-		print("Flash Helper | Flashing!")
-		--Control.Move()
-		Control.CastSpell(flashHK)
-		justFlashed = true;
-		flashTimer = 0;
-	end
-end
 
-function CrowdControlled()
+	elseif ICOrbWalk then
+		if CanFlashBasic() then
+			return true;
+		end
+
+	elseif EOrbWalk then
+		if CanFlashBasic() then
+			return true;
+		end
+	else
+		if CanFlashBasic() then
+			return true;
+		end
+	end
+
+	return false;
 
 end
 
@@ -205,32 +190,35 @@ function GetOrbWalker()
 	if EOW then 
 		print("Flash Helper | eXternal Orbwalker Detected.")
 		EOrbWalk = true
-		DisableDefaultOW()
 	elseif _G.SDK then
 		print("Flash Helper | IC's Orbwalker integration loaded.")
 		ICOrbWalk = true
-		DisableDefaultOW()
 	elseif _G.Orbwalker then
-		print("Flash Helper | GOS Default Orbwalker Detected.")
+		print("Flash Helper | Noddy's Orbwalker Detected.")
 		GOSOrbWalk = true
 	else
-		print("Flash Helper | No Orbwalker?");
+		print("Flash Helper | ExtLib / No Orbwalker");
+		otherOW = true;
 	end
 end
 
-
-function DisableDefaultOW()
-    if _G.Orbwalker then
-    	_G.Orbwalker.Enabled:Value(false)
-    	_G.Orbwalker.Drawings.Enabled:Value(false)
-    	--print("Flash Helper | Default Orbwalker Disabled");
+function CanFlashBasic()
+	if myHero:GetSpellData(flashSpell).currentCd ~= 0 then
+		print("Flash Helper | Flash Failed | COOLDOWN")
+		return false
 	end
+
+	if myHero.attackData.state == STATE_WINDUP then
+		print("Flash Helper | Flash Failed | OrbWalker WINDUP")
+		return false;
+	end
+
+	return true;
 end
 
-function ICPreAttack()
-	autoAttacking = true;
-end
-
-function ICPostAttack()
-	autoAttacking = false;
+function FlashGO()
+	print("Flash Helper | Flashing!")
+	justFlashed = true;
+	flashTimer = 0;
+	Control.CastSpell(flashHK)
 end
