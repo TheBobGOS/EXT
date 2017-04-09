@@ -1,6 +1,6 @@
 --variables
 local lolVersion = "7.7"
-local scrVersion = "0.3.15 Alpha"
+local scrVersion = "0.4.21 Beta"
 
 menuIcon = "http://i.imgur.com/uO0pDv8.png"
 
@@ -22,9 +22,16 @@ Vector(6322,-98,6951), Vector(5164,-110,5653), Vector(7706,-98,5579), Vector(102
 local bushPositionsHA = {Vector(4153,-178,5177), Vector(5447,-178,6327), Vector(5907,-178,6459),
 Vector(6365,-178,6959), Vector(6547,-178,7393), Vector(7731,-178,8623)}
 
+local bushesInRange = {}
+
 --Main Menu
-local PMenu = MenuElement({type = MENU, id = "PMenu", name = "Flash Helper | Pre-Beta", leftIcon = menuIcon})
+local PMenu = MenuElement({type = MENU, id = "PMenu", name = "Flash Helper | Beta", leftIcon = menuIcon})
 PMenu:MenuElement({id = "Enabled", name = "Enabled", value = true})
+
+PMenu:MenuElement({type = MENU, id = "Flashing", name = "Flash Settings"})
+PMenu.Flashing:MenuElement({id = "Brush",name = "Flash to Brush when possible", value = false})
+--PMenu.Flashing:MenuElement({id = "Juke",name = "Juke when possible", value = false})
+--PMenu.Flashing:MenuElement({id = "AutoFlash",name = "Auto Flash (beta)", value = false})
 
 --Main Menu-- Key Setting
 PMenu:MenuElement({type = MENU, id = "Key", name = "Key Settings"})
@@ -40,7 +47,7 @@ PMenu.Drawing.Basic:MenuElement({id = "During", name = "Only Draw when Flash off
 PMenu.Drawing:MenuElement({type = MENU, id = "Bushes", name = "Bushes"})
 PMenu.Drawing.Bushes:MenuElement({id = "Bushes", name = "Draw Bushes", value = true})
 PMenu.Drawing.Bushes:MenuElement({id = "Alpha", name = "Alpha", value = 0.75, min = 0, max = 1, step = 0.01})
-PMenu.Drawing.Bushes:MenuElement({id = "During", name = "Only Draw when Flash off CD", value = false})
+PMenu.Drawing.Bushes:MenuElement({id = "During", name = "Only Draw when Flash off CD", value = true})
 
 local hasFlash = true;
 local flashSlot = 0;
@@ -48,6 +55,7 @@ local flashSpell = SUMMONER_1;
 local flashHK = HK_SUMMONER_1;
 local justFlashed = false;
 local flashTimer = 0;
+local autoAttacking = false
 --OW variables
 local EOrbWalk = false
 local ICOrbWalk= false
@@ -79,7 +87,7 @@ function OnTick()
 	if not PMenu.Enabled:Value() then return end
 	if not hasFlash then return end
 	if frameOne then
-		--GetOrbWalker()
+		GetOrbWalker()
 		frameOne = false
 	end
 	if myHero.dead then return end
@@ -168,7 +176,7 @@ function CanFlash()
 		end
 
 	elseif ICOrbWalk then
-		if CanFlashBasic() then
+		if CanFlashBasic() and not autoAttacking then
 			return true;
 		end
 
@@ -191,8 +199,10 @@ function GetOrbWalker()
 		print("Flash Helper | eXternal Orbwalker Detected.")
 		EOrbWalk = true
 	elseif _G.SDK then
-		print("Flash Helper | IC's Orbwalker integration loaded.")
+		print("Flash Helper | IC's Orbwalker Detected.")
 		ICOrbWalk = true
+		_G.SDK.Orbwalker:OnPreAttack(ICAAStart())
+		_G.SDK.Orbwalker:OnAttack(ICAAEnd())
 	elseif _G.Orbwalker then
 		print("Flash Helper | Noddy's Orbwalker Detected.")
 		GOSOrbWalk = true
@@ -221,4 +231,14 @@ function FlashGO()
 	justFlashed = true;
 	flashTimer = 0;
 	Control.CastSpell(flashHK)
+end
+
+function ICAAStart()
+	autoAttacking = true
+	print("IC AA")
+end
+
+function ICAAEnd()
+	autoAttacking = false
+	print("IC Done")
 end
