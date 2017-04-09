@@ -28,8 +28,8 @@ local bushesInRange = {}
 local PMenu = MenuElement({type = MENU, id = "PMenu", name = "Flash Helper | Beta", leftIcon = menuIcon})
 PMenu:MenuElement({id = "Enabled", name = "Enabled", value = true})
 
-PMenu:MenuElement({type = MENU, id = "Flashing", name = "Flash Settings"})
-PMenu.Flashing:MenuElement({id = "Brush",name = "Flash to Brush when possible", value = false})
+--PMenu:MenuElement({type = MENU, id = "Flashing", name = "Flash Settings"})
+--PMenu.Flashing:MenuElement({id = "Brush",name = "Flash to Brush when possible", value = false})
 --PMenu.Flashing:MenuElement({id = "Juke",name = "Juke when possible", value = false})
 --PMenu.Flashing:MenuElement({id = "AutoFlash",name = "Auto Flash (beta)", value = false})
 
