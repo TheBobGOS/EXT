@@ -227,6 +227,7 @@ function CanFlashBasic()
 end
 
 function FlashGO()
+	Control.RightClick(cursorPos)
 	print("Flash Helper | Flashing!")
 	justFlashed = true;
 	flashTimer = 0;
