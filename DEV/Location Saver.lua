@@ -6,14 +6,14 @@ local dumpTimer = 0
 local justSaved = false
 local saveTimer = 0
 
-local PMenu = MenuElement({type = MENU, id = "PMenu", name = "Location List Creator", leftIcon = menuIcon})
-PMenu:MenuElement({id = "Enabled", name = "Enabled", value = true})
+local PMenuLSLS = MenuElement({type = MENU, id = "PMenuLSLS", name = "Location List Creator", leftIcon = menuIcon})
+PMenuLSLS:MenuElement({id = "Enabled", name = "Enabled", value = true})
 
-PMenu:MenuElement({id = "arraySize",name = "List Count", value = 1, min = 1, max = 5, step = 1})
-PMenu:MenuElement({id = "arrayCurrent",name = "Current List", value = 1, min = 1, max = 5, step = 1})
-PMenu:MenuElement({id = "locationRead",name = "Save to List", key = string.byte("A")})
-PMenu:MenuElement({id = "locationSave",name = "Write Lists to File", key = string.byte("P")})
-PMenu:MenuElement({id = "createArray",name = "Clear Lists / New Lists", key = string.byte("N")})
+PMenuLSLS:MenuElement({id = "arraySize",name = "List Count", value = 1, min = 1, max = 5, step = 1})
+PMenuLSLS:MenuElement({id = "arrayCurrent",name = "Current List", value = 1, min = 1, max = 5, step = 1})
+PMenuLSLS:MenuElement({id = "locationRead",name = "Save to List", key = string.byte("A")})
+PMenuLSLS:MenuElement({id = "locationSave",name = "Write Lists to File", key = string.byte("P")})
+PMenuLSLS:MenuElement({id = "createArray",name = "Clear Lists / New Lists", key = string.byte("N")})
 
 locationArray = {}
 emptyArray = {}
@@ -35,7 +35,7 @@ end
 
 function OnTick()
 	--print(myHero:GetSpellData(1).castTime)
-	if not PMenu.Enabled:Value() then return end
+	if not PMenuLS.Enabled:Value() then return end
 
 	if justDumpped then
 		dumpTimer = dumpTimer + 1;
@@ -44,10 +44,10 @@ function OnTick()
 			dumpTimer = 0
 		end
 	else
-		if PMenu.createArray:Value() then
+		if PMenuLS.createArray:Value() then
 			BuildLocationArray()
 		end
-		if PMenu.locationSave:Value() then
+		if PMenuLS.locationSave:Value() then
 			SaveLocationsToFile2()
 		end
 	end
@@ -59,7 +59,7 @@ function OnTick()
 			saveTimer = 0
 		end
 	else
-		if PMenu.locationRead:Value() then
+		if PMenuLS.locationRead:Value() then
 			SaveLocationToArray2()
 		end
 	end
@@ -78,7 +78,7 @@ function tablelength(T)
 end
 
 function SaveLocationToArray()
-	local arrayCurrent = PMenu.Location.arrayCurrent:Value()
+	local arrayCurrent = PMenuLS.Location.arrayCurrent:Value()
 	local currentPosition = Vector(math.floor(myHero.pos.x + 0.5),math.floor(myHero.pos.y + 0.5),math.floor(myHero.pos.z + 0.5))
 	table.insert(locationArray[arrayCurrent],currentPosition)
 	arraySize[arrayCurrent] = arraySize[arrayCurrent] + 1
@@ -89,7 +89,7 @@ function SaveLocationToArray()
 end
 
 function SaveLocationToArray2()
-	local arrayCurrent = PMenu.Location.arrayCurrent:Value()
+	local arrayCurrent = PMenuLS.Location.arrayCurrent:Value()
 	local currentPosition = Vector(math.floor(myHero.pos.x + 0.5),math.floor(myHero.pos.y + 0.5),math.floor(myHero.pos.z + 0.5))
 
 	if arrayCurrent == 1 then
@@ -121,7 +121,7 @@ function SaveLocationsToFile()
 	fileName = fileName:gsub("%:", "_")
 	print(fileName)
 
-	for i=1,PMenu.Location.arraySize:Value(),1 do
+	for i=1,PMenuLS.Location.arraySize:Value(),1 do
 		fileText = fileText .. "{"
 		for ii = 1, arraySize[i],1 do
 			currentPosition = locationArray[i][ii]
@@ -130,7 +130,7 @@ function SaveLocationsToFile()
 				fileText = fileText .. ", "
 			end
 		end
-		if i < PMenu.Location.arraySize:Value() then
+		if i < PMenuLS.Location.arraySize:Value() then
 			fileText = fileText .. "},\n"
 		else
 			fileText = fileText .. "}"
@@ -157,7 +157,7 @@ function SaveLocationsToFile2()
 	fileName = fileName:gsub("%:", "_")
 	print(fileName)
 
-	for i=1,PMenu.Location.arraySize:Value(),1 do
+	for i=1,PMenuLS.Location.arraySize:Value(),1 do
 		fileText = fileText .. "{"
 
 		if i == 1 then
@@ -208,7 +208,7 @@ function SaveLocationsToFile2()
 
 		end
 
-		if i < PMenu.Location.arraySize:Value() then
+		if i < PMenuLS.Location.arraySize:Value() then
 			fileText = fileText .. "},\n"
 		else
 			fileText = fileText .. "}"

@@ -25,29 +25,29 @@ Vector(6365,-178,6959), Vector(6547,-178,7393), Vector(7731,-178,8623)}
 local bushesInRange = {}
 
 --Main Menu
-local PMenu = MenuElement({type = MENU, id = "PMenu", name = "Flash Helper | Beta", leftIcon = menuIcon})
-PMenu:MenuElement({id = "Enabled", name = "Enabled", value = true})
+local PMenuFH = MenuElement({type = MENU, id = "PMenuFH", name = "Flash Helper | Beta", leftIcon = menuIcon})
+PMenuFH:MenuElement({id = "Enabled", name = "Enabled", value = true})
 
---PMenu:MenuElement({type = MENU, id = "Flashing", name = "Flash Settings"})
---PMenu.Flashing:MenuElement({id = "Brush",name = "Flash to Brush when possible", value = false})
---PMenu.Flashing:MenuElement({id = "Juke",name = "Juke when possible", value = false})
---PMenu.Flashing:MenuElement({id = "AutoFlash",name = "Auto Flash (beta)", value = false})
+--PMenuFH:MenuElement({type = MENU, id = "Flashing", name = "Flash Settings"})
+--PMenuFH.Flashing:MenuElement({id = "Brush",name = "Flash to Brush when possible", value = false})
+--PMenuFH.Flashing:MenuElement({id = "Juke",name = "Juke when possible", value = false})
+--PMenuFH.Flashing:MenuElement({id = "AutoFlash",name = "Auto Flash (beta)", value = false})
 
 --Main Menu-- Key Setting
-PMenu:MenuElement({type = MENU, id = "Key", name = "Key Settings"})
-PMenu.Key:MenuElement({id = "Flash",name = "Flash HotKey", key = string.byte("F")})
---PMenu.Key:MenuElement({id = "Dump",name = "Debug Position", key = string.byte("H")})
+PMenuFH:MenuElement({type = MENU, id = "Key", name = "Key Settings"})
+PMenuFH.Key:MenuElement({id = "Flash",name = "Flash HotKey", key = string.byte("F")})
+--PMenuFH.Key:MenuElement({id = "Dump",name = "Debug Position", key = string.byte("H")})
 
 --Main Menu-- Drawing 
-PMenu:MenuElement({type = MENU, id = "Drawing", name = "Drawing"})
-PMenu.Drawing:MenuElement({type = MENU, id = "Basic", name = "Basic"})
-PMenu.Drawing.Basic:MenuElement({id = "Flash", name = "Draw Flash Range", value = true})
-PMenu.Drawing.Basic:MenuElement({id = "Tran", name = "Alpha", value = 0.5, min = 0, max = 1, step = 0.01})
-PMenu.Drawing.Basic:MenuElement({id = "During", name = "Only Draw when Flash off CD", value = true})
-PMenu.Drawing:MenuElement({type = MENU, id = "Bushes", name = "Bushes"})
-PMenu.Drawing.Bushes:MenuElement({id = "Bushes", name = "Draw Bushes", value = true})
-PMenu.Drawing.Bushes:MenuElement({id = "Alpha", name = "Alpha", value = 0.75, min = 0, max = 1, step = 0.01})
-PMenu.Drawing.Bushes:MenuElement({id = "During", name = "Only Draw when Flash off CD", value = true})
+PMenuFH:MenuElement({type = MENU, id = "Drawing", name = "Drawing"})
+PMenuFH.Drawing:MenuElement({type = MENU, id = "Basic", name = "Basic"})
+PMenuFH.Drawing.Basic:MenuElement({id = "Flash", name = "Draw Flash Range", value = true})
+PMenuFH.Drawing.Basic:MenuElement({id = "Tran", name = "Alpha", value = 0.5, min = 0, max = 1, step = 0.01})
+PMenuFH.Drawing.Basic:MenuElement({id = "During", name = "Only Draw when Flash off CD", value = true})
+PMenuFH.Drawing:MenuElement({type = MENU, id = "Bushes", name = "Bushes"})
+PMenuFH.Drawing.Bushes:MenuElement({id = "Bushes", name = "Draw Bushes", value = true})
+PMenuFH.Drawing.Bushes:MenuElement({id = "Alpha", name = "Alpha", value = 0.75, min = 0, max = 1, step = 0.01})
+PMenuFH.Drawing.Bushes:MenuElement({id = "During", name = "Only Draw when Flash off CD", value = true})
 
 local hasFlash = true;
 local flashSlot = 0;
@@ -84,7 +84,7 @@ function OnLoad()
 end
 
 function OnTick()
-	if not PMenu.Enabled:Value() then return end
+	if not PMenuFH.Enabled:Value() then return end
 	if not hasFlash then return end
 	if frameOne then
 		GetOrbWalker()
@@ -98,11 +98,11 @@ function OnTick()
 			justFlashed = false
 		end
 	else
-	--if PMenu.Key.Dump:Value() then
+	--if PMenuFH.Key.Dump:Value() then
 		--print(math.floor(myHero.pos.x + 0.5) .. ", " .. math.floor(myHero.pos.y + 0.5) .. ", ".. math.floor(myHero.pos.z + 0.5))
 	--end
 	--
-		if PMenu.Key.Flash:Value() then
+		if PMenuFH.Key.Flash:Value() then
 			if CanFlash() then
 				FlashGO();
 			else
@@ -117,16 +117,16 @@ function OnDraw()
 	local lineWidth = 1
 	if not hasFlash then return end
 	if myHero.dead then return end
-	if PMenu.Drawing.Basic.Flash:Value() then
-		if PMenu.Drawing.Basic.During:Value() and myHero:GetSpellData(flashSpell).currentCd ~= 0 then
+	if PMenuFH.Drawing.Basic.Flash:Value() then
+		if PMenuFH.Drawing.Basic.During:Value() and myHero:GetSpellData(flashSpell).currentCd ~= 0 then
 			
 		else
-			Draw.Circle(myHero.pos,405,1,Draw.Color(PMenu.Drawing.Basic.Tran:Value() * 255, 255, 255, 0))
+			Draw.Circle(myHero.pos,405,1,Draw.Color(PMenuFH.Drawing.Basic.Tran:Value() * 255, 255, 255, 0))
 		end
 	end
-	--Draw.Circle(myHero.pos,415,1,Draw.Color(PMenu.Drawing.Tran:Value() * 255, 255, 255, 0))
-	if PMenu.Drawing.Bushes.Bushes:Value() then
-		if PMenu.Drawing.Bushes.During:Value() and myHero:GetSpellData(flashSpell).currentCd ~= 0 then
+	--Draw.Circle(myHero.pos,415,1,Draw.Color(PMenuFH.Drawing.Tran:Value() * 255, 255, 255, 0))
+	if PMenuFH.Drawing.Bushes.Bushes:Value() then
+		if PMenuFH.Drawing.Bushes.During:Value() and myHero:GetSpellData(flashSpell).currentCd ~= 0 then
 
 		else
 			if Game.mapID == 11 then
@@ -137,7 +137,7 @@ function OnDraw()
 						else
 							lineWidth = 1
 						end
-						Draw.Circle(bushPositionsSR[i],75,lineWidth,Draw.Color(PMenu.Drawing.Bushes.Alpha:Value() * 255, 255, 255, 0))
+						Draw.Circle(bushPositionsSR[i],75,lineWidth,Draw.Color(PMenuFH.Drawing.Bushes.Alpha:Value() * 255, 255, 255, 0))
 					end
 				end
 			end
@@ -149,7 +149,7 @@ function OnDraw()
 						else
 							lineWidth = 1
 						end
-						Draw.Circle(bushPositionsTT[i],75,lineWidth,Draw.Color(PMenu.Drawing.Bushes.Alpha:Value() * 255, 255, 255, 0))
+						Draw.Circle(bushPositionsTT[i],75,lineWidth,Draw.Color(PMenuFH.Drawing.Bushes.Alpha:Value() * 255, 255, 255, 0))
 					end
 				end
 			end
@@ -161,7 +161,7 @@ function OnDraw()
 						else
 							lineWidth = 1
 						end
-						Draw.Circle(bushPositionsHA[i],75,lineWidth,Draw.Color(PMenu.Drawing.Bushes.Alpha:Value() * 255, 255, 255, 0))
+						Draw.Circle(bushPositionsHA[i],75,lineWidth,Draw.Color(PMenuFH.Drawing.Bushes.Alpha:Value() * 255, 255, 255, 0))
 					end
 				end
 			end
