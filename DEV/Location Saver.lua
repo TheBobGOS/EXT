@@ -49,7 +49,7 @@ function OnTick()
 		if PMenuLS.createArray:Value() then
 			BuildLocationArray()
 		end
-		if PMenuLS.Save:Value() then
+		if PMenuLS.locationSave:Value() then
 			SaveLocationsToFile2()
 		end
 	end
@@ -61,7 +61,7 @@ function OnTick()
 			saveTimer = 0
 		end
 	else
-		if PMenuLS.Read:Value() then
+		if PMenuLS.locationRead:Value() then
 			SaveLocationToArray2()
 		end
 	end
