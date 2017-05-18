@@ -35,6 +35,8 @@ end
 
 function OnTick()
 	--print(myHero:GetSpellData(1).castTime)
+	if not PMenu.Enabled:Value() then return end
+
 	if justDumpped then
 		dumpTimer = dumpTimer + 1;
 		if dumpTimer >= 30 then
@@ -64,7 +66,6 @@ function OnTick()
 end
 
 function OnDraw()
-
 
 
 end
