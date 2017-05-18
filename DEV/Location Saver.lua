@@ -217,7 +217,7 @@ function SaveLocationsToFile2()
 		end
 	end
 
-	fileText = fileText .. "\n\nGenerated with Bobs List Creator Version: " .. scrVer .. ". (http://gamingonsteroids.com/topic/21041-dev-tool-location-list-creator/)"
+	fileText = fileText .. "\n\nGenerated with Bobs List Creator Version: " .. scrVer .. ". \n(http://gamingonsteroids.com/topic/21041-dev-tool-location-list-creator/)"
 
 	local file = io.open(COMMON_PATH .. fileName .. ".txt", "w")
 	file:write(fileText)
