@@ -47,7 +47,7 @@ function OnTick()
 		if PMenuLS.createArray:Value() then
 			BuildLocationArray()
 		end
-		if PMenuLS.locationSave:Value() then
+		if PMenuLSSave:Value() then
 			SaveLocationsToFile2()
 		end
 	end
@@ -59,7 +59,7 @@ function OnTick()
 			saveTimer = 0
 		end
 	else
-		if PMenuLS.locationRead:Value() then
+		if PMenuLSRead:Value() then
 			SaveLocationToArray2()
 		end
 	end
@@ -78,7 +78,7 @@ function tablelength(T)
 end
 
 function SaveLocationToArray()
-	local arrayCurrent = PMenuLS.Location.arrayCurrent:Value()
+	local arrayCurrent = PMenuLS.arrayCurrent:Value()
 	local currentPosition = Vector(math.floor(myHero.pos.x + 0.5),math.floor(myHero.pos.y + 0.5),math.floor(myHero.pos.z + 0.5))
 	table.insert(locationArray[arrayCurrent],currentPosition)
 	arraySize[arrayCurrent] = arraySize[arrayCurrent] + 1
@@ -89,7 +89,7 @@ function SaveLocationToArray()
 end
 
 function SaveLocationToArray2()
-	local arrayCurrent = PMenuLS.Location.arrayCurrent:Value()
+	local arrayCurrent = PMenuLS.arrayCurrent:Value()
 	local currentPosition = Vector(math.floor(myHero.pos.x + 0.5),math.floor(myHero.pos.y + 0.5),math.floor(myHero.pos.z + 0.5))
 
 	if arrayCurrent == 1 then
@@ -121,7 +121,7 @@ function SaveLocationsToFile()
 	fileName = fileName:gsub("%:", "_")
 	print(fileName)
 
-	for i=1,PMenuLS.Location.arraySize:Value(),1 do
+	for i=1,PMenuLS.arraySize:Value(),1 do
 		fileText = fileText .. "{"
 		for ii = 1, arraySize[i],1 do
 			currentPosition = locationArray[i][ii]
@@ -130,7 +130,7 @@ function SaveLocationsToFile()
 				fileText = fileText .. ", "
 			end
 		end
-		if i < PMenuLS.Location.arraySize:Value() then
+		if i < PMenuLS.arraySize:Value() then
 			fileText = fileText .. "},\n"
 		else
 			fileText = fileText .. "}"
@@ -157,7 +157,7 @@ function SaveLocationsToFile2()
 	fileName = fileName:gsub("%:", "_")
 	print(fileName)
 
-	for i=1,PMenuLS.Location.arraySize:Value(),1 do
+	for i=1,PMenuLS.arraySize:Value(),1 do
 		fileText = fileText .. "{"
 
 		if i == 1 then
@@ -208,7 +208,7 @@ function SaveLocationsToFile2()
 
 		end
 
-		if i < PMenuLS.Location.arraySize:Value() then
+		if i < PMenuLS.arraySize:Value() then
 			fileText = fileText .. "},\n"
 		else
 			fileText = fileText .. "}"
