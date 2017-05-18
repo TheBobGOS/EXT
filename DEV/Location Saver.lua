@@ -6,14 +6,14 @@ local dumpTimer = 0
 local justSaved = false
 local saveTimer = 0
 
-local PMenuLSLS = MenuElement({type = MENU, id = "PMenuLSLS", name = "Location List Creator", leftIcon = menuIcon})
+local PMenuLS = MenuElement({type = MENU, id = "PMenuLS", name = "Location List Creator", leftIcon = menuIcon})
 PMenuLSLS:MenuElement({id = "Enabled", name = "Enabled", value = true})
 
-PMenuLSLS:MenuElement({id = "arraySize",name = "List Count", value = 1, min = 1, max = 5, step = 1})
-PMenuLSLS:MenuElement({id = "arrayCurrent",name = "Current List", value = 1, min = 1, max = 5, step = 1})
-PMenuLSLS:MenuElement({id = "locationRead",name = "Save to List", key = string.byte("A")})
-PMenuLSLS:MenuElement({id = "locationSave",name = "Write Lists to File", key = string.byte("P")})
-PMenuLSLS:MenuElement({id = "createArray",name = "Clear Lists / New Lists", key = string.byte("N")})
+PMenuLS:MenuElement({id = "arraySize",name = "List Count", value = 1, min = 1, max = 5, step = 1})
+PMenuLS:MenuElement({id = "arrayCurrent",name = "Current List", value = 1, min = 1, max = 5, step = 1})
+PMenuLS:MenuElement({id = "locationRead",name = "Save to List", key = string.byte("A")})
+PMenuLS:MenuElement({id = "locationSave",name = "Write Lists to File", key = string.byte("P")})
+PMenuLS:MenuElement({id = "createArray",name = "Clear Lists / New Lists", key = string.byte("N")})
 
 locationArray = {}
 emptyArray = {}
