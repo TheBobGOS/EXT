@@ -1,6 +1,6 @@
 menuIcon = "http://i.imgur.com/5YiKv0l.png"
 
-local scrVer = "1.3"
+local scrVer = "1.4"
 
 local justDumpped = false
 local dumpTimer = 0
@@ -217,7 +217,7 @@ function SaveLocationsToFile2()
 		end
 	end
 
-	fileText = fileText .. "\n\nGenerated with Bobs List Creator Version:" .. scrVer .. ". (http://gamingonsteroids.com/topic/21041-dev-tool-location-list-creator/)"
+	fileText = fileText .. "\n\nGenerated with Bobs List Creator Version: " .. scrVer .. ". (http://gamingonsteroids.com/topic/21041-dev-tool-location-list-creator/)"
 
 	local file = io.open(COMMON_PATH .. fileName .. ".txt", "w")
 	file:write(fileText)
