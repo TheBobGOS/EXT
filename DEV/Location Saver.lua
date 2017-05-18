@@ -7,7 +7,7 @@ local justSaved = false
 local saveTimer = 0
 
 local PMenuLS = MenuElement({type = MENU, id = "PMenuLS", name = "Location List Creator", leftIcon = menuIcon})
-PMenuLSLS:MenuElement({id = "Enabled", name = "Enabled", value = true})
+PMenuLS:MenuElement({id = "Enabled", name = "Enabled", value = true})
 
 PMenuLS:MenuElement({id = "arraySize",name = "List Count", value = 1, min = 1, max = 5, step = 1})
 PMenuLS:MenuElement({id = "arrayCurrent",name = "Current List", value = 1, min = 1, max = 5, step = 1})
